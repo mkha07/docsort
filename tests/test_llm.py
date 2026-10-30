@@ -57,6 +57,7 @@ def test_namer_error_returns_none():
 
 def test_namer_requires_credentials(monkeypatch):
     monkeypatch.delenv("GIGACHAT_CREDENTIALS", raising=False)
+    monkeypatch.setattr("docsort.llm._load_dotenv", lambda: None)
     with pytest.raises(RuntimeError, match="GIGACHAT_CREDENTIALS"):
         GigaChatNamer()
 

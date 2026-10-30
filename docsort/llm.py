@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 ENV_CREDENTIALS = "GIGACHAT_CREDENTIALS"
 DEFAULT_SCOPE = "GIGACHAT_API_PERS"
-DEFAULT_MODEL = "GigaChat"
+DEFAULT_MODEL = "GigaChat-3-Ultra"
 LLM_TEXT_LIMIT = 3000   # сколько символов начала документа отправляем в LLM
 MAX_TITLE_WORDS = 8
 MAX_TITLE_LEN = 80
@@ -41,6 +41,15 @@ def sanitize_title(raw: str) -> str | None:
     return FILENAME_PREFIX + title + FILENAME_SUFFIX
 
 
+def _load_dotenv() -> None:
+    """Подгрузить ``.env`` из текущей папки, если установлен python-dotenv."""
+    try:
+        from dotenv import find_dotenv, load_dotenv
+    except ImportError:
+        return
+    load_dotenv(find_dotenv(usecwd=True))
+
+
 class GigaChatNamer:
     """Вызываемый объект: текст документа -> имя файла (или ``None``)."""
 
@@ -49,7 +58,7 @@ class GigaChatNamer:
         credentials: str | None = None,
         scope: str = DEFAULT_SCOPE,
         model: str = DEFAULT_MODEL,
-        verify_ssl: bool = True,
+        verify_ssl: bool = False,
         client=None,
     ):
         """
@@ -66,6 +75,7 @@ class GigaChatNamer:
         self._client = client
         if client is not None:
             return
+        _load_dotenv()
         credentials = credentials or os.environ.get(ENV_CREDENTIALS)
         if not credentials:
             raise RuntimeError(f"Не задан ключ GigaChat: установите переменную окружения {ENV_CREDENTIALS}")

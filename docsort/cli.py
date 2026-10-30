@@ -50,8 +50,9 @@ def build_parser() -> argparse.ArgumentParser:
     p_rename.add_argument("--dry-run", action="store_true", help="показать изменения, ничего не меняя")
     p_rename.add_argument("--llm", action="store_true",
                           help="получать название через GigaChat (ключ в GIGACHAT_CREDENTIALS)")
-    p_rename.add_argument("--no-verify-ssl", action="store_true",
-                          help="не проверять SSL-сертификат GigaChat (если не установлен корневой сертификат)")
+    p_rename.add_argument("--verify-ssl", action="store_true",
+                          help="проверять SSL-сертификат GigaChat (по умолчанию отключено: "
+                               "нужен корневой сертификат Минцифры)")
 
     return parser
 
@@ -72,7 +73,7 @@ def main(argv: list[str] | None = None) -> int:
         namer = None
         if args.llm:
             try:
-                namer = GigaChatNamer(verify_ssl=not args.no_verify_ssl)
+                namer = GigaChatNamer(verify_ssl=args.verify_ssl)
             except RuntimeError as exc:
                 log.error("%s", exc)
                 return 1
