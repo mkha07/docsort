@@ -16,7 +16,7 @@ CLI-инструмент, который раскладывает PDF рабоч
 Требуется Python 3.10+.
 
 ```bash
-git clone https://github.com/<you>/docsort.git
+git clone https://github.com/mkha07/docsort.git
 cd docsort
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"     # CLI + pytest
