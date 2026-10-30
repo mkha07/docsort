@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "docsort"
+version = "0.1.0"
+description = "CLI для сортировки и переименования PDF рабочих программ дисциплин"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = ["pypdf>=4.0"]
+
+[project.optional-dependencies]
+llm = ["gigachat>=0.1", "python-dotenv>=1.0"]
+dev = ["pytest>=7.0", "pytest-cov>=4.0"]
+
+[project.scripts]
+docsort = "docsort.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["docsort*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
